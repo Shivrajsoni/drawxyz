@@ -69,7 +69,7 @@ app.post('/signin',async function(req:Request,res:Response){
             });
         }
         const token = jwt.sign({
-            email:parsedata.data.email,
+            userId:user?.id
         },JWT_SECRET);
         
         res.json({
@@ -120,10 +120,51 @@ app.get('/createroom',middleware,async function(req,res){
         return;
     }
 })
+app.get('/chats/:roomId',async (req,res)=>{
+    const roomId = Number(req.params.roomId);
+    try {
+        const chats = await prismaclient.chat.findMany({
+            where:{
+                roomId:roomId
+            },
+            orderBy:{
+                id:"desc"
+            },
+            take:50
+        })
+        res.json(chats);
+        
+    } catch (error) {
+        res.json({
+            message:"Invalid data for chat"
+        })
+        
+    }
+})
+
+app.get('/room/:slug',async (req,res)=>{
+    const slug = req.params.slug;
+    try {
+        const room = await prismaclient.room.findMany({
+            where:{
+                slug:slug
+            }
+        })
+        res.json({
+            room
+        });
+        
+    } catch (error) {
+        res.json({
+            message:"Invalid data for slug"
+        })
+        
+    }
+})
 
 
 
 
-app.listen(5050, () => {
+app.listen(4037, () => {
     console.log('http-backend server running on port : 5050');
 });
