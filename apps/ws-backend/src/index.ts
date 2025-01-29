@@ -2,7 +2,7 @@ import jwt, { decode, JwtPayload } from "jsonwebtoken";
 import { WebSocketServer } from "ws";
 import { JWT_SECRET } from "@repo/backend-common/config";
 
-const wss = new WebSocketServer({port:8081});
+const wss = new WebSocketServer({port:8900});
 
 wss.on('connection',function connection(ws,request){
     // verifiying the server only authenicated user can come
